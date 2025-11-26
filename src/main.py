@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.core.config import settings
+from src.core.exceptions import BaseAppException, exception_handler
 
 from src.routes import routers
 

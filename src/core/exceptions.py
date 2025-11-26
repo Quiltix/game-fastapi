@@ -1,5 +1,15 @@
 from fastapi import status
+from fastapi import Request
+from fastapi.responses import JSONResponse
+from traceback import print_exception
 
+async def exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    if isinstance(exc, BaseAppException):
+        exception_content = {"detail": exc.detail, "additional_info": exc.additional_info}
+        print_exception(exc)
+        return JSONResponse(status_code=exc.status_code, content=exception_content)
+
+    raise exc
 class BaseAppException(Exception):
     """
     Базовый класс для всех кастомных исключений в приложении.
