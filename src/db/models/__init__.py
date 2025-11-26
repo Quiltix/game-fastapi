@@ -1,9 +1,7 @@
 """Database models."""
 
-from app.lib.models.base import BaseModel
+from .base import BaseModel as BaseModel
+from .game import Game, GamePlayer
+from .user import User
 
-from .file import FileModel
-from .lottery import LotteryModel, LotteryPrize
-from .user import UserModel
-
-__all__ = ["BaseModel", "UserModel", "FileModel", "LotteryPrize", "LotteryModel"]
+__all__ = ["BaseModel","Game", "GamePlayer", "User"]
