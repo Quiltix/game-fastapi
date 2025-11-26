@@ -1,3 +1,5 @@
+from typing import Any
+
 from fastapi import status
 from fastapi import Request
 from fastapi.responses import JSONResponse
@@ -11,18 +13,34 @@ async def exception_handler(request: Request, exc: Exception) -> JSONResponse:
 
     raise exc
 class BaseAppException(Exception):
-    """
-    Базовый класс для всех кастомных исключений в приложении.
-    """
-    status_code: int = status.HTTP_500_INTERNAL_SERVER_ERROR
-    detail: str = "Произошла непредвиденная ошибка на сервере."
+    """Base exception for all application-specific errors."""
 
-    def __init__(self, detail: str | None = None, status_code: int | None = None):
-        if detail is not None:
-            self.detail = detail
-        if status_code is not None:
-            self.status_code = status_code
-        super().__init__(self.detail)
+    detail: str = "An application error occurred."
+    status_code: int = 500
+    additional_info: dict[str, Any] = {}
+
+    def __init__(
+        self,
+        *args: Any,
+        detail: str | None = None,
+        status_code: int | None = None,
+        additional_info: dict[str, Any] = {},
+    ) -> None:
+        """Init base exception."""
+        self.detail = detail if detail is not None else self.__class__.detail
+        self.status_code = status_code if status_code is not None else self.__class__.status_code
+        self.additional_info = additional_info
+
+        super().__init__(*(str(arg) for arg in args if arg))
+
+    def __str__(self) -> str:
+        return self.detail
+
+    def __repr__(self) -> str:
+        return (
+            f"{self.__class__.__name__}(detail={self.detail!r}, status_code={self.status_code},"
+            f"additional_info: {self.additional_info})"
+        )
 
 class NotFoundException(BaseAppException):
     """
