@@ -1,0 +1,22 @@
+# Веб-фреймворк и сервер
+fastapi
+uvicorn[standard]
+fastapi[standard]
+
+# Работа с базой данных (асинхронный PostgreSQL)
+sqlalchemy[asyncio]
+asyncpg
+alembic
+
+pydantic
+pydantic-settings
+
+# Аутентификация и авторизация (JWT и хеширование паролей)
+python-jose[cryptography]
+bcrypt
+
+# Поддержка Websocket
+websockets
+
+# Для удобной работы с JWT токенами (опционально, но рекомендуется)
+python-multipart

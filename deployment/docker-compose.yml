@@ -1,0 +1,35 @@
+volumes:
+  db_data:
+
+services:
+  backend:
+    image: ghcr.io/vladyalk/hack-final:main
+
+    restart: unless-stopped
+    environment:
+      GENERAL__CORS_ORIGINS: ${GENERAL__CORS_ORIGINS}
+      DATABASE__URL: ${DATABASE__URL}
+      JWT__SECRET_KEY: ${JWT__SECRET_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+
+    ports:
+      - 22000:8000
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Required variable POSTGRES_USER not set}
+      POSTGRES_DB: ${POSTGRES_DB:?Required variable POSTGRES_DB not set}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Required variable POSTGRES_PASSWORD not set}
+
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
