@@ -61,3 +61,9 @@ class UnauthorizedException(BaseAppException):
     """
     status_code: int = status.HTTP_401_UNAUTHORIZED
     detail: str = "Требуется авторизация для доступа к ресурсу."
+
+class InvalidCredentialsException(UnauthorizedException):
+    """
+    Исключение, вызываемое при предоставлении неверных учетных данных.
+    """
+    detail: str = "Неверные учетные данные."

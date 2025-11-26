@@ -2,6 +2,6 @@
 
 from .base import BaseModel as BaseModel
 from .game import Game, GamePlayer
-from .user import User
+from .user import UserModel
 
-__all__ = ["BaseModel","Game", "GamePlayer", "User"]
+__all__ = ["BaseModel","Game", "GamePlayer", "UserModel"]
