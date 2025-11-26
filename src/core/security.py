@@ -1,12 +1,29 @@
 from datetime import datetime, UTC, timedelta
 
 import bcrypt
-from jose import jwt
+from fastapi import Depends
+from fastapi.security import HTTPBearer
+from jose import jwt, JWTError
 
 from src.core.config import settings
+from src.core.exceptions import UnauthorizedException
 from src.schemas.token import TokenData
 
+async def authenticate_user(credentials: HTTPBearer = Depends(HTTPBearer(auto_error=False))) -> int:
+    """Dependency to authenticate a user."""
+    try:
+        if not credentials:
+            raise JWTError
+        token_data = decode_token(credentials.credentials)
+        return int(token_data.sub)
+    except JWTError:
+        raise UnauthorizedException()
 
+def decode_token(token: str) -> TokenData:
+
+    payload = jwt.decode(token, settings.jwt.secret_key, algorithms=[settings.jwt.algorithm])
+
+    return TokenData.model_validate(payload)
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
 
