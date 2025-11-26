@@ -37,3 +37,18 @@ db-upgrade:
 	@echo "Upgrading database to the latest version..."
 	@$(ALEMBIC) upgrade head
 	@echo "Database upgraded."
+
+run-sv:
+	@echo "Starting development services..."
+	@docker compose -p game_fastapi -f deployment/docker-compose.local.yml up -d
+	@echo "Development environment started."
+
+stop-sv:
+	@echo "Stopping development environment..."
+	@docker compose  -p hack-game_fastapi -f deployment/docker-compose.local.yml down
+	@echo "Development environment stopped."
+
+stop-sv-hard:
+	@echo "Stopping development environment..."
+	@docker compose  -p hack-game_fastapi -f deployment/docker-compose.local.yml down -v
+	@echo "Development environment stopped."

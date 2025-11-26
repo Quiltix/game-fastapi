@@ -27,8 +27,6 @@ class Game(BaseModel):
 
     status: Mapped[GameStatus] = mapped_column("status",Enum(GameStatus), default=GameStatus.PENDING, nullable=False)
 
-    # Храним состояние доски в виде строки из 9 символов, где '_' - пустая клетка
-    # Например: "X_O___O_X"
     board_state: Mapped[str] = mapped_column(String(9), default="""___
                                                                    ___
                                                                    ___""", nullable=False)
