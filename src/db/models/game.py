@@ -1,6 +1,6 @@
 from enum import StrEnum
 
-from sqlalchemy import Enum, String, ForeignKey, DateTime, func
+from sqlalchemy import Enum, String, ForeignKey, DateTime, func, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.db.models import BaseModel
@@ -15,9 +15,15 @@ class GameResult(StrEnum):
     O_WINS = "o_wins"
     DRAW = "draw"
 
+class PlayerSymbol(StrEnum):
+    X = "X"
+    O = "O"
+
 
 class Game(BaseModel):
     __tablename__ = "games"
+
+    id: Mapped[int] = mapped_column("id", Integer(), primary_key=True, autoincrement=True)
 
     status: Mapped[GameStatus] = mapped_column("status",Enum(GameStatus), default=GameStatus.PENDING, nullable=False)
 
@@ -40,13 +46,10 @@ class Game(BaseModel):
     player_associations = relationship("GamePlayer", back_populates="game", cascade="all, delete-orphan")
 
 
-class PlayerSymbol(StrEnum):
-    X = "X"
-    O = "O"
-
-
 class GamePlayer(BaseModel):
     __tablename__ = "game_players"
+
+    id: Mapped[int] = mapped_column("id", Integer(), primary_key=True, autoincrement=True)
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
     game_id: Mapped[int] = mapped_column(ForeignKey("games.id"), primary_key=True)
