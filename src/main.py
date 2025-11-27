@@ -8,7 +8,7 @@ from src.core.exceptions import BaseAppException, exception_handler
 
 from src.routes import routers
 
-app = FastAPI(title="hack-final", root_path=settings.general.api_prefix, redirect_slashes=False)
+app = FastAPI(title="FastapiGame", root_path=settings.general.api_prefix, redirect_slashes=False)
 
 app.add_middleware(
     CORSMiddleware,
