@@ -67,3 +67,11 @@ class InvalidCredentialsException(UnauthorizedException):
     Исключение, вызываемое при предоставлении неверных учетных данных.
     """
     detail: str = "Неверные учетные данные."
+
+class ConflictException(UnauthorizedException):
+    """
+    Исключение, вызываемое при предоставлении неверных учетных данных.
+    """
+    status_code: int = status.HTTP_409_CONFLICT
+    detail: str = "Конфликт состояний."
+

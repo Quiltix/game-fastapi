@@ -39,7 +39,7 @@ class Game(BaseModel):
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     finished_at: Mapped[DateTime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
-    winner = relationship("User")
+    winner = relationship("UserModel")
 
     player_associations = relationship("GamePlayer", back_populates="game", cascade="all, delete-orphan")
 
@@ -54,6 +54,6 @@ class GamePlayer(BaseModel):
 
     symbol: Mapped[PlayerSymbol] = mapped_column("symbol",Enum(PlayerSymbol), nullable=False)
 
-    user = relationship("User", back_populates="game_associations")
+    user = relationship("UserModel", back_populates="game_associations")
     game = relationship("Game", back_populates="player_associations")
 

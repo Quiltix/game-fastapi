@@ -7,6 +7,7 @@ from src.schemas.auth import TokenResponseSchema, RegisterRequestSchema, LoginRe
 from src.schemas.token import TokenData
 from src.schemas.user import UserCreateSchema
 
+import src.services.user as user_service
 
 async def create_user_tokens(user_id: int) -> TokenResponseSchema:
 
@@ -33,7 +34,7 @@ async def register_new_user(db: AsyncSession, schema: RegisterRequestSchema) -> 
 
 async def authenticate_user(db: AsyncSession, schema: LoginRequestSchema) -> UserModel:
 
-    user = await user_service.get_user_model(db=db, email=schema.email, raise_if_not_found=False)
+    user = await user_service.get_user_by_username(db=db, username=schema.username, raise_if_not_found=False)
 
     if not user or not verify_password(schema.password, user.hashed_password):
         raise InvalidCredentialsException()

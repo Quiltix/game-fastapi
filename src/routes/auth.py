@@ -4,6 +4,8 @@ from src.core.depends import DatabaseDep
 from src.schemas.auth import RegisterRequestSchema, TokenResponseSchema, LoginRequestSchema
 from src.schemas.user import UserResponseSchema
 
+import src.services.auth as auth_service
+
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
