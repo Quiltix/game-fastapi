@@ -31,6 +31,28 @@ async def get_user_by_username(db: AsyncSession, username: str, raise_if_not_fou
 
     return user
 
+async def get_user_by_id(db: AsyncSession, id: int, raise_if_not_found: bool = True) -> UserModel | None:
+    """
+    Находит пользователя по имени.
+
+    Args:
+        db: Сессия базы данных.
+        username: Имя пользователя для поиска.
+        raise_if_not_found: Если True, вызывает исключение NotFoundException,
+                            если пользователь не найден. Если False, возвращает None.
+
+    Returns:
+        Объект UserModel или None.
+    """
+    query = select(UserModel).where(UserModel.id == id)
+    result = await db.execute(query)
+    user = result.scalar_one_or_none()
+
+    if user is None and raise_if_not_found:
+        raise NotFoundException(detail="Пользователь не найден.")
+
+    return user
+
 
 async def create_user(db: AsyncSession, schema: UserCreateSchema) -> UserModel:
     """
