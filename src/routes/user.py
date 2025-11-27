@@ -8,7 +8,7 @@ import src.services.user as user_service
 router = APIRouter(prefix="/user", tags=["User"])
 
 
-@router.post("/me", status_code=status.HTTP_200_OK, response_model=UserResponseSchema)
+@router.get("/me", status_code=status.HTTP_200_OK, response_model=UserResponseSchema)
 async def register(db: DatabaseDep, user_id: UserDep) -> UserResponseSchema:
     """Register new user."""
     user = await user_service.get_user_by_id(db, user_id)
