@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=GameResponseSchema, status_code=status.HTTP_201_CREATED, summary="Создать новую игру")
+@router.post("", response_model=GameResponseSchema, status_code=status.HTTP_201_CREATED, summary="Создать новую игру")
 async def create_new_game(user_id: UserDep, db: DatabaseDep):
     """Создает новую игру, ожидающую второго игрока.
 
@@ -86,7 +86,7 @@ async def get_game_details(game_id: int, db: DatabaseDep, user_id: UserDep):
     game = await game_service.get_game_by_id(db=db, game_id=game_id)
     return game
 
-@router.get("/", response_model=list[GameResponseSchema], summary="Получить все завершенные игры")
+@router.get("", response_model=list[GameResponseSchema], summary="Получить все завершенные игры")
 async def get_game_details(db: DatabaseDep, user_id: UserDep):
     """Возвращает детальную информацию о завершенных играх.
 

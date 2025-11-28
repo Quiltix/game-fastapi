@@ -27,7 +27,7 @@ async def get_my_game_history(user_id: UserDep, db: DatabaseDep):
     Необходима авторизация."""
     return await game_service.get_user_game_history(db=db, user_id=user_id)
 
-@router.patch("/me/username", response_model=UserResponseSchema, summary="Изменить имя пользователя")
+@router.patch("/username", response_model=UserResponseSchema, summary="Изменить имя пользователя")
 async def update_my_username(schema: UserUpdateUsernameSchema, user_id: UserDep, db: DatabaseDep):
     """
     Обновляет имя текущего аутентифицированного пользователя.
@@ -42,7 +42,7 @@ async def update_my_username(schema: UserUpdateUsernameSchema, user_id: UserDep,
     return updated_user
 
 
-@router.patch("/me/password", status_code=status.HTTP_200_OK, summary="Изменить пароль")
+@router.patch("/password", status_code=status.HTTP_200_OK, summary="Изменить пароль")
 
 async def update_my_password(
     schema: UserUpdatePasswordSchema,
