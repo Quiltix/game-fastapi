@@ -1,13 +1,14 @@
 # src/services/user_service.py
 
-from sqlalchemy import select
+from sqlalchemy import select, func, case
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.exceptions import NotFoundException, ConflictException, ForbiddenException
 from src.core.security import verify_password, get_password_hash
 
-from src.db.models import UserModel
-from src.schemas.user import UserCreateSchema
+from src.db.models import UserModel, Game
+from src.db.models.game import GameResult, GamePlayer, GameStatus
+from src.schemas.user import UserCreateSchema, UserStatsSchema
 
 
 async def get_user_by_username(db: AsyncSession, username: str, raise_if_not_found: bool = True) -> UserModel | None:
@@ -96,3 +97,49 @@ async def delete_user(db: AsyncSession, user_id: int) -> UserModel:
     await db.refresh(user_to_delete)
 
     return user_to_delete
+
+
+async def get_user_stats(db: AsyncSession, user_id: int) -> UserStatsSchema:
+    """
+    Рассчитывает и возвращает игровую статистику для пользователя.
+    """
+    # 1. Создаем запрос для агрегации данных
+    # Мы хотим посчитать количество побед, поражений и ничьих
+    query = (
+        select(
+            func.count(Game.id).label("total_games"),
+
+            func.sum(case((Game.winner_id == user_id, 1), else_=0)).label("wins"),
+
+            func.sum(case((
+                (Game.winner_id != None) & (Game.winner_id != user_id), 1),
+                else_=0
+            )).label("losses"),
+
+            func.sum(case((Game.result == GameResult.DRAW, 1), else_=0)).label("draws")
+        )
+        .join(Game.player_associations)
+        .where(
+            GamePlayer.user_id == user_id,
+            Game.status == GameStatus.COMPLETED
+        )
+    )
+
+    result = await db.execute(query)
+    stats_row = result.one()
+
+    wins = stats_row.wins
+    losses = stats_row.losses
+
+    if (wins + losses) == 0:
+        win_rate = 0.0
+    else:
+        win_rate = round((wins / (wins + losses)) * 100, 2)
+
+    return UserStatsSchema(
+        total_games=stats_row.total_games,
+        wins=wins,
+        losses=losses,
+        draws=stats_row.draws,
+        win_rate=win_rate
+    )
