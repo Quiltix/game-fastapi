@@ -3,7 +3,7 @@ from fastapi import APIRouter, status
 from src.core.depends import DatabaseDep, UserDep
 from src.schemas.auth import UserUpdateUsernameSchema, UserUpdatePasswordSchema
 from src.schemas.game import GameResponseSchema
-from src.schemas.user import UserResponseSchema
+from src.schemas.user import UserResponseSchema, UserStatsSchema
 from src.services import game as game_service
 
 import src.services.user as user_service
@@ -72,3 +72,14 @@ async def delete_my_profile(user_id: UserDep, db: DatabaseDep):
     """
     deleted_user = await user_service.delete_user(db=db, user_id=user_id)
     return deleted_user
+
+
+@router.get("/me/stats", response_model=UserStatsSchema, summary="Получить свою игровую статистику")
+async def get_my_stats(user_id: UserDep, db: DatabaseDep):
+    """
+    Рассчитывает и возвращает статистику для текущего аутентифицированного пользователя.
+
+    Учитываются только завершенные игры.
+    """
+    stats = await user_service.get_user_stats(db=db, user_id=user_id)
+    return stats
