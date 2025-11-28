@@ -76,3 +76,12 @@ class ConflictException(BaseAppException):
     status_code: int = status.HTTP_409_CONFLICT
     detail: str = "Конфликт состояний."
 
+class ForbiddenException(BaseAppException):
+    """
+    Исключение, вызываемое при попытке доступа к ресурсу с недостаточными правами.
+    """
+    status_code: int = status.HTTP_403_FORBIDDEN
+    detail: str = "Доступ запрещен."
+
+
+
