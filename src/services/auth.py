@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.exceptions import InvalidCredentialsException
+from src.core.exceptions import InvalidCredentialsException, ForbiddenException
 from src.core.security import create_token, get_password_hash, verify_password
 from src.db.models import UserModel
 from src.schemas.auth import TokenResponseSchema, RegisterRequestSchema, LoginRequestSchema
@@ -39,6 +39,8 @@ async def authenticate_user(db: AsyncSession, schema: LoginRequestSchema) -> Use
 
     user = await user_service.get_user_by_username(db=db, username=schema.username, raise_if_not_found=False)
 
+    if not user.is_active:
+        raise ForbiddenException(detail="Ваш аккаунт был удален.")
     if not user or not verify_password(schema.password, user.hashed_password):
         raise InvalidCredentialsException()
 
