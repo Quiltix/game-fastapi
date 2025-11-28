@@ -68,7 +68,7 @@ class InvalidCredentialsException(UnauthorizedException):
     """
     detail: str = "Неверные учетные данные."
 
-class ConflictException(UnauthorizedException):
+class ConflictException(BaseAppException):
     """
     Исключение, вызываемое при предоставлении неверных учетных данных.
     """
