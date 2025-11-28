@@ -2,9 +2,7 @@ from fastapi import APIRouter, status
 
 from src.core.depends import UserDep, DatabaseDep
 import src.services.game as game_service
-import src.services.user as user_service
 from src.schemas.game import GameResponseSchema, MakeMoveRequestSchema
-from src.schemas.user import UserResponseSchema
 
 router = APIRouter(
     prefix="/games",
