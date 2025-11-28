@@ -1,3 +1,5 @@
+import random
+
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -34,15 +36,16 @@ async def create_new_game(db: AsyncSession, user_id: int) -> Game:
     """Создает новую игру для пользователя."""
     new_game = Game(status=GameStatus.PENDING)
 
+    available_symbols = [PlayerSymbol.X, PlayerSymbol.O]
+    first_player_symbol = random.choice(available_symbols)
     first_player = GamePlayer(
         user_id=user_id,
         game=new_game,
-        symbol=PlayerSymbol.X
+        symbol=first_player_symbol
     )
 
     db.add(new_game)
     db.add(first_player)
-
     await db.flush()
     await db.refresh(new_game)
 
@@ -126,10 +129,15 @@ async def add_player_to_game(db: AsyncSession, game_id: int, user_id: int) -> Ga
     if is_already_player:
         raise ConflictException(detail="Вы уже являетесь участником этой игры.")
 
+    first_player = game.player_associations[0]
+    if first_player.symbol == PlayerSymbol.X:
+        new_player_symbol = PlayerSymbol.O
+    else:
+        new_player_symbol = PlayerSymbol.X
     new_game_player = GamePlayer(
         user_id=user_id,
         game_id=game_id,
-        symbol=PlayerSymbol.O
+        symbol=new_player_symbol
     )
     db.add(new_game_player)
 
