@@ -7,7 +7,6 @@ from src.core.schemas import BaseSchema
 
 class UserBaseSchema(BaseSchema):
     """Base schema for user data, containing common fields."""
-
     username: str
 
 
@@ -21,5 +20,6 @@ class UserResponseSchema(UserBaseSchema):
     """Schema for user data in API responses."""
 
     id: int
+    username: str
     is_active: bool
 

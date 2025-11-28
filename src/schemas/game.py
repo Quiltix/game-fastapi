@@ -3,8 +3,7 @@ from pydantic import ConfigDict
 
 from src.core.schemas import BaseSchema
 from src.db.models.game import GameStatus, GameResult, PlayerSymbol
-from src.schemas.user import UserBaseSchema
-
+from src.schemas.user import UserResponseSchema
 
 
 class PlayerInGameSchema(BaseSchema):
@@ -12,7 +11,7 @@ class PlayerInGameSchema(BaseSchema):
     Представляет одного игрока внутри игровой сессии.
     """
     symbol: PlayerSymbol
-    user: UserBaseSchema
+    user: UserResponseSchema
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -27,7 +26,7 @@ class GameResponseSchema(BaseSchema):
     created_at: datetime
     finished_at: datetime | None = None
 
-    winner: UserBaseSchema | None = None
+    winner: UserResponseSchema | None = None
     players: list[PlayerInGameSchema]
 
     model_config = ConfigDict(from_attributes=True)
