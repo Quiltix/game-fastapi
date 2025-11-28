@@ -107,18 +107,21 @@ async def get_user_stats(db: AsyncSession, user_id: int) -> UserStatsSchema:
     # Мы хотим посчитать количество побед, поражений и ничьих
     query = (
         select(
-            func.count(Game.id).label("total_games"),
+            func.coalesce(func.count(Game.id), 0).label("total_games"),
 
-            func.sum(case((Game.winner_id == user_id, 1), else_=0)).label("wins"),
+            func.coalesce(
+                func.sum(case((Game.winner_id == user_id, 1), else_=0)), 0
+            ).label("wins"),
 
-            func.sum(case((
-                (Game.winner_id != None) & (Game.winner_id != user_id), 1),
-                else_=0
-            )).label("losses"),
+            func.coalesce(
+                func.sum(case(((Game.winner_id != None) & (Game.winner_id != user_id), 1), else_=0)), 0
+            ).label("losses"),
 
-            func.sum(case((Game.result == GameResult.DRAW, 1), else_=0)).label("draws")
+            func.coalesce(
+                func.sum(case((Game.result == GameResult.DRAW, 1), else_=0)), 0
+            ).label("draws")
         )
-        .join(Game.player_associations)
+        .join(Game.player_associations, isouter=True)  # Используем LEFT JOIN
         .where(
             GamePlayer.user_id == user_id,
             Game.status == GameStatus.COMPLETED
@@ -130,7 +133,6 @@ async def get_user_stats(db: AsyncSession, user_id: int) -> UserStatsSchema:
 
     wins = stats_row.wins
     losses = stats_row.losses
-
     if (wins + losses) == 0:
         win_rate = 0.0
     else:
