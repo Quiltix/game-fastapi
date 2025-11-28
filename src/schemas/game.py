@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import ConfigDict
+from pydantic import ConfigDict, Field
 
 from src.core.schemas import BaseSchema
 from src.db.models.game import GameStatus, GameResult, PlayerSymbol
@@ -27,6 +27,10 @@ class GameResponseSchema(BaseSchema):
     finished_at: datetime | None = None
 
     winner: UserResponseSchema | None = None
-    players: list[PlayerInGameSchema]
+    players: list[PlayerInGameSchema] = Field(alias="player_associations")
 
     model_config = ConfigDict(from_attributes=True)
+
+class MakeMoveRequestSchema(BaseSchema):
+    """Схема для запроса на совершение хода."""
+    position: int = Field(..., ge=0, le=8)
