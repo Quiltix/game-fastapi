@@ -48,7 +48,3 @@ stop-sv:
 	@docker compose  -p hack-game_fastapi -f deployment/docker-compose.local.yml down
 	@echo "Development environment stopped."
 
-stop-sv-hard:
-	@echo "Stopping development environment..."
-	@docker compose  -p hack-game_fastapi -f deployment/docker-compose.local.yml down -v
-	@echo "Development environment stopped."
