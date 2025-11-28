@@ -62,3 +62,13 @@ async def update_my_password(
         current_password=schema.current_password,
         new_password=schema.new_password
     )
+
+@router.delete("/me", response_model=UserResponseSchema, summary="Удалить свой профиль (мягкое удаление)")
+async def delete_my_profile(user_id: UserDep, db: DatabaseDep):
+    """
+    Выполняет 'мягкое' удаление профиля текущего аутентифицированного пользователя.
+
+    Профиль становится неактивным, а имя пользователя анонимизируется.
+    """
+    deleted_user = await user_service.delete_user(db=db, user_id=user_id)
+    return deleted_user
