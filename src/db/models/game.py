@@ -27,9 +27,7 @@ class Game(BaseModel):
 
     status: Mapped[GameStatus] = mapped_column("status",Enum(GameStatus), default=GameStatus.PENDING, nullable=False)
 
-    board_state: Mapped[str] = mapped_column(String(9), default="""___
-                                                                   ___
-                                                                   ___""", nullable=False)
+    board_state: Mapped[str] = mapped_column(String(9), default="_________", nullable=False)
 
     result: Mapped[GameResult] = mapped_column("result",Enum(GameResult),
                                                nullable=True)
