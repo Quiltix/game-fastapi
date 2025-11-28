@@ -74,7 +74,7 @@ async def delete_my_profile(user_id: UserDep, db: DatabaseDep):
     return deleted_user
 
 
-@router.get("/me/stats", response_model=UserStatsSchema, summary="Получить свою игровую статистику")
+@router.get("/stats", response_model=UserStatsSchema, summary="Получить свою игровую статистику")
 async def get_my_stats(user_id: UserDep, db: DatabaseDep):
     """
     Рассчитывает и возвращает статистику для текущего аутентифицированного пользователя.
