@@ -13,8 +13,8 @@ class RegisterRequestSchema(BaseSchema):
 class LoginRequestSchema(BaseSchema):
     """Схема для авторизации."""
 
-    username: str = Field(..., min_length=3, max_length=64)
-    password: str = Field(..., min_length=5, max_length=64)
+    username: str = Field(..., min_length=3, max_length=50)
+    password: str = Field(..., min_length=5, max_length=50)
 
 
 class TokenResponseSchema(BaseSchema):
@@ -25,10 +25,10 @@ class TokenResponseSchema(BaseSchema):
 
 class UserUpdateUsernameSchema(BaseSchema):
     """Схема для обновления имени пользователя."""
-    new_username: str = Field(..., min_length=3, max_length=64)
+    new_username: str = Field(..., min_length=3, max_length=50)
 
 
 class UserUpdatePasswordSchema(BaseSchema):
     """Схема для обновления пароля."""
     current_password: str
-    new_password: str = Field(..., min_length=8, max_length=64)
+    new_password: str = Field(..., min_length=8, max_length=50)
