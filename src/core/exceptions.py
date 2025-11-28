@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 from traceback import print_exception
 
 async def exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    """Перехватывает все исключения и возвращает JSON-ответ с деталями ошибки."""
     if isinstance(exc, BaseAppException):
         exception_content = {"detail": exc.detail, "additional_info": exc.additional_info}
         print_exception(exc)
@@ -13,7 +14,7 @@ async def exception_handler(request: Request, exc: Exception) -> JSONResponse:
 
     raise exc
 class BaseAppException(Exception):
-    """Base exception for all application-specific errors."""
+    """Базовое исключение для приложения."""
 
     detail: str = "An application error occurred."
     status_code: int = 500
@@ -70,7 +71,7 @@ class InvalidCredentialsException(UnauthorizedException):
 
 class ConflictException(BaseAppException):
     """
-    Исключение, вызываемое при предоставлении неверных учетных данных.
+    Исключение, вызываемое при конфликте состояний.
     """
     status_code: int = status.HTTP_409_CONFLICT
     detail: str = "Конфликт состояний."

@@ -8,6 +8,6 @@ _T = TypeVar("_T", bound="BaseModel")
 
 
 class BaseModel(DeclarativeBase):
-    """Base model for SQLAlchemy ORM."""
+    """Базовая модель."""
 
     __abstract__ = True

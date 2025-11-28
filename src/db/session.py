@@ -12,7 +12,7 @@ session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False
 
 
 async def get_database_session() -> AsyncGenerator[AsyncSession]:
-    """Dependency to get a database session."""
+    """Завидимость для получения сессии БД."""
     session = session_maker()
     try:
         yield session

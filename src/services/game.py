@@ -51,7 +51,7 @@ async def create_new_game(db: AsyncSession, user_id: int) -> Game:
 
 
 async def process_player_move(db: AsyncSession, game_id: int, user_id: int, position: int) -> Game:
-    """Обрабатывает ход игрока, обновляет состояние игры и возвращает ОБНОВЛЕННЫЙ ОБЪЕКТ ИГРЫ."""
+    """Обрабатывает ход игрока, обновляет состояние игры и возвращает обновленный объект игры."""
     game = await get_game_by_id(db, game_id)
 
     if game.status != GameStatus.IN_PROGRESS:

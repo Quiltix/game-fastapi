@@ -10,6 +10,7 @@ from src.schemas.user import UserCreateSchema
 import src.services.user as user_service
 
 async def create_user_tokens(user_id: int) -> TokenResponseSchema:
+    """Создает токены для пользователя."""
 
     _user_id = str(user_id)
     access_token_data = TokenData(sub=_user_id)
@@ -20,6 +21,7 @@ async def create_user_tokens(user_id: int) -> TokenResponseSchema:
 
 
 async def register_new_user(db: AsyncSession, schema: RegisterRequestSchema) -> UserModel:
+    """Регистрирует нового пользователя."""
 
     hashed_password = get_password_hash(schema.password)
 
@@ -33,6 +35,7 @@ async def register_new_user(db: AsyncSession, schema: RegisterRequestSchema) -> 
 
 
 async def authenticate_user(db: AsyncSession, schema: LoginRequestSchema) -> UserModel:
+    """Аутентифицирует пользователя."""
 
     user = await user_service.get_user_by_username(db=db, username=schema.username, raise_if_not_found=False)
 

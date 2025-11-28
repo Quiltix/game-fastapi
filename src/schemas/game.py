@@ -7,9 +7,7 @@ from src.schemas.user import UserResponseSchema
 
 
 class PlayerInGameSchema(BaseSchema):
-    """
-    Представляет одного игрока внутри игровой сессии.
-    """
+    """Схема для представления игрока в игре."""
     symbol: PlayerSymbol
     user: UserResponseSchema
 
@@ -18,6 +16,7 @@ class PlayerInGameSchema(BaseSchema):
 
 
 class GameResponseSchema(BaseSchema):
+    """Схема для ответа на запрос о текущей игре."""
 
     id: int
     status: GameStatus

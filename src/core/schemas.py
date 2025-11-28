@@ -2,12 +2,12 @@ from pydantic import BaseModel
 
 
 class BaseSchema(BaseModel):
-    """Base schema for Pydantic models."""
+    """Базовая схема для всех схем."""
 
     class Config:
-        """Configuration for Pydantic models."""
+        """Конфигурация схемы."""
 
-        from_attributes = True
-        validate_by_name = True
-        use_enum_values = True
-        str_strip_whitespace = True
+        from_attributes = True # Преобразование атрибутов в объекты
+        validate_by_name = True # Проверка по имени
+        use_enum_values = True # Использование значений enum
+        str_strip_whitespace = True # Удаление пробелов в начале и конце строки

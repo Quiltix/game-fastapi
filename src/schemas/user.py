@@ -6,18 +6,18 @@ from src.core.schemas import BaseSchema
 
 
 class UserBaseSchema(BaseSchema):
-    """Base schema for user data, containing common fields."""
+    """Базовая схема пользователя."""
     username: str
 
 
 class UserCreateSchema(UserBaseSchema):
-    """Schema for creating a user, includes the hashed password."""
+    """Схема для создания нового пользователя."""
 
     hashed_password: str
 
 
 class UserResponseSchema(UserBaseSchema):
-    """Schema for user data in API responses."""
+    """Схема для ответа на запрос пользователя."""
 
     id: int
     username: str

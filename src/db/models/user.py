@@ -5,6 +5,7 @@ from src.db.models import BaseModel
 
 
 class UserModel(BaseModel):
+    """Модель пользователя."""
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column("id", Integer(), primary_key=True, autoincrement=True)

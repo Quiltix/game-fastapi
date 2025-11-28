@@ -7,20 +7,24 @@ from src.db.models import BaseModel
 
 
 class GameStatus(StrEnum):
+    """Статусы игры."""
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
 class GameResult(StrEnum):
+    """Результаты игры."""
     X_WINS = "x_wins"
     O_WINS = "o_wins"
     DRAW = "draw"
 
 class PlayerSymbol(StrEnum):
+    """Символы игроков."""
     X = "X"
     O = "O"
 
 
 class Game(BaseModel):
+    """Модель игры."""
     __tablename__ = "games"
 
     id: Mapped[int] = mapped_column("id", Integer(), primary_key=True, autoincrement=True)
@@ -43,6 +47,7 @@ class Game(BaseModel):
 
 
 class GamePlayer(BaseModel):
+    """Модель связи игроков с игрой."""
     __tablename__ = "game_players"
 
     id: Mapped[int] = mapped_column("id", Integer(), primary_key=True, autoincrement=True)

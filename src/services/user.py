@@ -13,14 +13,6 @@ async def get_user_by_username(db: AsyncSession, username: str, raise_if_not_fou
     """
     Находит пользователя по имени.
 
-    Args:
-        db: Сессия базы данных.
-        username: Имя пользователя для поиска.
-        raise_if_not_found: Если True, вызывает исключение NotFoundException,
-                            если пользователь не найден. Если False, возвращает None.
-
-    Returns:
-        Объект UserModel или None.
     """
     query = select(UserModel).where(UserModel.username == username)
     result = await db.execute(query)
@@ -32,18 +24,7 @@ async def get_user_by_username(db: AsyncSession, username: str, raise_if_not_fou
     return user
 
 async def get_user_by_id(db: AsyncSession, id: int, raise_if_not_found: bool = True) -> UserModel | None:
-    """
-    Находит пользователя по имени.
-
-    Args:
-        db: Сессия базы данных.
-        username: Имя пользователя для поиска.
-        raise_if_not_found: Если True, вызывает исключение NotFoundException,
-                            если пользователь не найден. Если False, возвращает None.
-
-    Returns:
-        Объект UserModel или None.
-    """
+    """Находит пользователя по id."""
     query = select(UserModel).where(UserModel.id == id)
     result = await db.execute(query)
     user = result.scalar_one_or_none()
@@ -55,16 +36,7 @@ async def get_user_by_id(db: AsyncSession, id: int, raise_if_not_found: bool = T
 
 
 async def create_user(db: AsyncSession, schema: UserCreateSchema) -> UserModel:
-    """
-    Создает нового пользователя в базе данных.
-
-    Args:
-        db: Сессия базы данных.
-        schema: Pydantic-схема с данными для создания пользователя.
-
-    Returns:
-        Созданный объект UserModel.
-    """
+    """Создает нового пользователя в базе данных."""
 
     existing_user = await get_user_by_username(db, username=schema.username, raise_if_not_found=False)
     if existing_user:

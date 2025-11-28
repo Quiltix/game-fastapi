@@ -4,21 +4,21 @@ from src.core.schemas import BaseSchema
 
 
 class RegisterRequestSchema(BaseSchema):
-    """Schema for register."""
+    """Схема для регистрации."""
 
     username: str
     password: str
 
 
 class LoginRequestSchema(BaseSchema):
-    """Schema for login."""
+    """Схема для авторизации."""
 
     username: str
     password: str
 
 
 class TokenResponseSchema(BaseSchema):
-    """Schema for response token."""
+    """Схема для токена."""
 
     access_token: str
     token_type: str = "bearer"
