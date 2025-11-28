@@ -22,4 +22,10 @@ class UserResponseSchema(UserBaseSchema):
     id: int
     username: str
     is_active: bool
-
+class UserStatsSchema(BaseSchema):
+    """Схема для статистики игрока."""
+    total_games: int
+    wins: int
+    losses: int
+    draws: int
+    win_rate: float
