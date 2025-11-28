@@ -3,7 +3,8 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.exceptions import NotFoundException, ConflictException
+from src.core.exceptions import NotFoundException, ConflictException, ForbiddenException
+from src.core.security import verify_password, get_password_hash
 
 from src.db.models import UserModel
 from src.schemas.user import UserCreateSchema
@@ -47,3 +48,33 @@ async def create_user(db: AsyncSession, schema: UserCreateSchema) -> UserModel:
     await db.refresh(new_user_obj)
 
     return new_user_obj
+
+
+async def update_username(db: AsyncSession, user_id: int, new_username: str) -> UserModel:
+    """Обновляет имя пользователя."""
+    existing_user = await get_user_by_username(db, new_username, raise_if_not_found=False)
+    if existing_user and existing_user.id != user_id:
+        raise ConflictException(detail="Имя пользователя уже занято.")
+    if existing_user.username == new_username:
+        raise ConflictException(detail="Укажите новое имя.")
+
+    user_to_update = await get_user_by_id(db, user_id)
+    user_to_update.username = new_username
+
+    await db.flush()
+    await db.refresh(user_to_update)
+    return user_to_update
+
+
+async def update_password(db: AsyncSession, user_id: int, current_password: str, new_password: str) -> None:
+    user = await get_user_by_id(db, user_id)
+
+    if not verify_password(current_password, user.hashed_password):
+        raise ForbiddenException(detail="Неверный текущий пароль.")
+
+    if verify_password(new_password, user.hashed_password):
+        raise ConflictException(detail="Новый пароль не может совпадать с текущим.")
+
+    user.hashed_password = get_password_hash(new_password)
+
+    await db.flush()
