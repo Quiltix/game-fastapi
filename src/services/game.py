@@ -96,7 +96,7 @@ async def process_player_move(db: AsyncSession, game_id: int, user_id: int, posi
 
 
 async def get_game_by_id(db: AsyncSession, game_id: int) -> Game:
-    """Функция для получения игры с предзагрузкой игроков."""
+    """Функция для получения игры"""
     query = (
         select(Game)
         .where(Game.id == game_id)
@@ -108,7 +108,7 @@ async def get_game_by_id(db: AsyncSession, game_id: int) -> Game:
     result = await db.execute(query)
     game = result.scalar_one_or_none()
     if not game:
-        raise NotFoundException(detail=f"Игра с ID {game_id} не найдена.")
+        raise NotFoundException(detail="Игра не найдена.")
     return game
 
 
