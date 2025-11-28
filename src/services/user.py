@@ -78,3 +78,21 @@ async def update_password(db: AsyncSession, user_id: int, current_password: str,
     user.hashed_password = get_password_hash(new_password)
 
     await db.flush()
+
+
+async def delete_user(db: AsyncSession, user_id: int) -> UserModel:
+    """
+    Выполняетудаление пользователя.
+
+    - Устанавливает is_active = False.
+    - Изменяет username на 'deleted_user_id'.
+    """
+    user_to_delete = await get_user_by_id(db, user_id)
+    user_to_delete.is_active = False
+
+    user_to_delete.username = f"deleted_user_{user_id}"
+
+    await db.flush()
+    await db.refresh(user_to_delete)
+
+    return user_to_delete
