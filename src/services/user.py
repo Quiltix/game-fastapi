@@ -55,7 +55,7 @@ async def update_username(db: AsyncSession, user_id: int, new_username: str) -> 
     existing_user = await get_user_by_username(db, new_username, raise_if_not_found=False)
     if existing_user and existing_user.id != user_id:
         raise ConflictException(detail="Имя пользователя уже занято.")
-    if existing_user.username == new_username:
+    elif existing_user and existing_user.username == new_username:
         raise ConflictException(detail="Укажите новое имя.")
 
     user_to_update = await get_user_by_id(db, user_id)
