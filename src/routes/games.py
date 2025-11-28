@@ -12,23 +12,20 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=GameResponseSchema, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=GameResponseSchema, status_code=status.HTTP_201_CREATED, summary="Создать новую игру")
 async def create_new_game(user_id: UserDep, db: DatabaseDep):
     """Создает новую игру, ожидающую второго игрока."""
     new_game = await game_service.create_new_game(db=db, user_id=user_id)
     return new_game
 
 
-@router.post("/{game_id}/join", response_model=GameResponseSchema)
+@router.post("/{game_id}/join", response_model=GameResponseSchema, summary="Присоединиться к игре")
 async def join_game(game_id: int, user_id: UserDep, db: DatabaseDep):
     """Присоединяет текущего пользователя к игре."""
     updated_game = await game_service.add_player_to_game(db=db, game_id=game_id, user_id=user_id)
     return updated_game
 
-
-# --- НОВЫЙ ЭНДПОИНТ ДЛЯ ИГРОВОГО ПРОЦЕССА ---
-
-@router.post("/{game_id}/move", response_model=GameResponseSchema)
+@router.post("/{game_id}/move", response_model=GameResponseSchema, summary="Совершить ход в игре")
 async def make_move(
         game_id: int,
         move: MakeMoveRequestSchema,  # Принимаем позицию в теле запроса
@@ -50,23 +47,13 @@ async def make_move(
     return updated_game
 
 
-@router.get("/", response_model=list[GameResponseSchema])
+@router.get("/", response_model=list[GameResponseSchema], summary="Получить список доступных игр")
 async def get_available_games(db: DatabaseDep, user_id: UserDep):
     """Возвращает список игр, ожидающих второго игрока."""
     return await game_service.get_available_games(db=db)
 
-
-@router.get("/history", response_model=list[GameResponseSchema])
-async def get_my_game_history(user_id: UserDep, db: DatabaseDep):
-    """Возвращает историю игр текущего пользователя."""
-    return await game_service.get_user_game_history(db=db, user_id=user_id)
-
-
-@router.get("/{game_id}", response_model=GameResponseSchema)
+@router.get("/{game_id}", response_model=GameResponseSchema, summary="Получить детали игры")
 async def get_game_details(game_id: int, db: DatabaseDep, user_id: UserDep):
-    """
-    Возвращает детальную информацию о конкретной игре.
-    КЛЮЧЕВОЙ ЭНДПОИНТ ДЛЯ ПОЛЛИНГА.
-    """
+    """Возвращает детальную информацию о конкретной игре."""
     game = await game_service.get_game_by_id(db=db, game_id=game_id)
     return game

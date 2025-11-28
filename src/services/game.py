@@ -7,7 +7,7 @@ from src.db.models.game import PlayerSymbol, Game, GamePlayer, GameStatus, GameR
 
 
 def check_winner(board: str) -> PlayerSymbol | None:
-    """Проверяет, есть ли победитель на доске 3x3."""
+    """Проверяет, есть ли победитель."""
     winning_combinations = [
         (0, 1, 2),
         (3, 4, 5),
