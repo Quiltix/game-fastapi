@@ -162,3 +162,16 @@ async def get_user_game_history(db: AsyncSession, user_id: int) -> list[Game]:
     result = await db.execute(query)
     return list(result.scalars().all())
 
+async def get_all_completed_games(db: AsyncSession) -> list[Game]:
+    """Возвращает список завершенных игр.
+    Отсортированный по дате завершения."""
+    query = (
+        select(Game)
+        .join(Game.player_associations)
+        .where(Game.status == GameStatus.COMPLETED)
+        .options(selectinload(Game.player_associations).selectinload(GamePlayer.user))
+        .order_by(Game.finished_at.desc())
+    )
+    result = await db.execute(query)
+    return list(result.scalars().all())
+

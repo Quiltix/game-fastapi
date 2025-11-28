@@ -68,7 +68,7 @@ async def make_move(
     return updated_game
 
 
-@router.get("/", response_model=list[GameResponseSchema], summary="Получить список доступных игр")
+@router.get("/active", response_model=list[GameResponseSchema], summary="Получить список доступных игр")
 async def get_available_games(db: DatabaseDep, user_id: UserDep):
     """Возвращает список игр, ожидающих второго игрока.
 
@@ -85,3 +85,10 @@ async def get_game_details(game_id: int, db: DatabaseDep, user_id: UserDep):
     Необходима авторизация."""
     game = await game_service.get_game_by_id(db=db, game_id=game_id)
     return game
+
+@router.get("/", response_model=list[GameResponseSchema], summary="Получить все завершенные игры")
+async def get_game_details(db: DatabaseDep, user_id: UserDep):
+    """Возвращает детальную информацию о завершенных играх.
+
+    Необходима авторизация."""
+    return await game_service.get_all_completed_games(db=db)

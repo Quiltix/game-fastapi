@@ -13,6 +13,7 @@ async def exception_handler(request: Request, exc: Exception) -> JSONResponse:
         return JSONResponse(status_code=exc.status_code, content=exception_content)
 
     raise exc
+
 class BaseAppException(Exception):
     """Базовое исключение для приложения."""
 
