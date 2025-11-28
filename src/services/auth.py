@@ -39,9 +39,9 @@ async def authenticate_user(db: AsyncSession, schema: LoginRequestSchema) -> Use
 
     user = await user_service.get_user_by_username(db=db, username=schema.username, raise_if_not_found=False)
 
-    if not user.is_active:
+    if user and not user.is_active:
         raise ForbiddenException(detail="Ваш аккаунт был удален.")
-    if not user or not verify_password(schema.password, user.hashed_password):
+    elif not user or not verify_password(schema.password, user.hashed_password):
         raise InvalidCredentialsException()
 
     return user
