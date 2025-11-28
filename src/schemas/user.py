@@ -29,3 +29,7 @@ class UserStatsSchema(BaseSchema):
     losses: int
     draws: int
     win_rate: float
+
+class MessageSchema(BaseSchema):
+    """Схема для сообщений."""
+    message: str
