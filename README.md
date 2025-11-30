@@ -38,7 +38,7 @@
 ### 1. Клонирование репозитория
 
 ```bash
-git clone https://github.com/vladyalk/game-fastapi.git
+git clone https://github.com/Quiltix/game-fastapi.git
 cd game-fastapi
 ```
 
