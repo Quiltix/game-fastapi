@@ -45,3 +45,5 @@ async def authenticate_user(db: AsyncSession, schema: LoginRequestSchema) -> Use
         raise InvalidCredentialsException()
 
     return user
+
+

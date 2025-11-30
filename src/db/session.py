@@ -11,8 +11,7 @@ engine = create_async_engine(str(settings.database.url), isolation_level="READ C
 session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
-async def get_database_session() -> AsyncGenerator[AsyncSession]:
-    """Завидимость для получения сессии БД."""
+async def get_database_session() -> AsyncGenerator[AsyncSession, None]:
     session = session_maker()
     try:
         yield session
